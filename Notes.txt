@@ -1,3 +1,4 @@
 To start server->  python manage.py runserver   
 to create an app->  manage.py startapp tags
 install this to connect my sql >pipenv install mysqlclient
+to make sql migration -> python manage.py makemigrations
