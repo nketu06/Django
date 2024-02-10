@@ -23,14 +23,19 @@ class InventoryFilter(admin.SimpleListFilter):
             return queryset.filter(inventory__lt=10)
 
 
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    # inlines=[TagInLine]
+    prepopulated_fields={"slug":["title"]}
+    autocomplete_fields=["collection"]
     actions=['clear_inventory']
     list_display=["title","unit_price","inventory_status","collection__title"]
     list_editable=["unit_price"]
     list_per_page=20
     list_select_related=["collection"]
     list_filter = ["collection","last_update",InventoryFilter]
+    search_fields=["title__istartswith"]
 
     def collection__title(self,product):
         return product.collection.title
@@ -76,19 +81,27 @@ class CustomerAdmin(admin.ModelAdmin):
         )
     
 
-
+class OrderItemInline(admin.TabularInline):
+    autocomplete_fields=['product']
+    min_num=1
+    max_num=10
+    model=models.OrderItem
+    extra=0
 
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display=['id',"placed_at",'customer']
     list_filter=["customer"]
+    autocomplete_fields=["customer"]
+    inlines=[OrderItemInline]
    
 
 
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
     list_display=['title','products_count']
+    search_fields=["title"]
 
     @admin.display(ordering='products_count')
     def products_count(self,collection):
