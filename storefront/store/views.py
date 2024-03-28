@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .pagination import DefaultPagination
-from .models import Cart, Collection, OrderItem, Product, Review
-from .serializers import CartSerializer, ProductSerializer,CollectionSerializer, ReviewSerializer
+from .models import Cart, CartItem, Collection, OrderItem, Product, Review
+from .serializers import AddCartItemSerializer, CartItemSerializer, CartSerializer, ProductSerializer,CollectionSerializer, ReviewSerializer, UpdateCartItemSerializer
 from django.db.models.aggregates import Count
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin,RetrieveModelMixin,DestroyModelMixin
@@ -71,7 +71,21 @@ class CartViewSet(CreateModelMixin,GenericViewSet,RetrieveModelMixin,DestroyMode
     serializer_class=CartSerializer
 
 
+class CartItemViewSet(ModelViewSet):
+    http_method_names=['get','post','patch','delete']
 
+    def get_serializer_class(self):
+        if self.request.method=='POST':
+            return AddCartItemSerializer
+        if self.request.method=='PATCH':
+            return UpdateCartItemSerializer
+        return CartItemSerializer
+    
+    def get_serializer_context(self):
+        return {'cart_id':self.kwargs['cart_pk']}
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']).select_related('product')
 
 
 
