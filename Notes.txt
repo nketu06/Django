@@ -2,3 +2,12 @@ To start server->  python manage.py runserver
 to create an app->  manage.py startapp tags
 install this to connect my sql >pipenv install mysqlclient
 to make sql migration -> python manage.py makemigrations
+
+
+djangorestframework_simplejwt
+djoser
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcxMTgyMTY3NiwiaWF0IjoxNzExNzM1Mjc2LCJqdGkiOiIyNmY4MTgzZDQxMDY0MWJkYTEwZDVkMTNlOWYxMzAyYyIsInVzZXJfaWQiOjJ9.hV8D9Z2mQ8YoKqDuF8udiDcAxT0bdOVCP0mtzXuKLlw",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExODIxNjc2LCJpYXQiOjE3MTE3MzUyNzYsImp0aSI6ImEwZjdhNmE2M2JjMTQzOTI5N2ExOGUwMmZjNTk5YjIwIiwidXNlcl9pZCI6Mn0.Vq6F4GjZJmEwGjrU9U0-PeKggg9UUxOTi6p5a1lQE7Y"
+}
+http://127.0.0.1:8000/auth/users/me/
