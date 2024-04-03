@@ -6,8 +6,8 @@ from rest_framework.decorators import action
 
 from .permissions import IsAdminOrReadOnly,ViewCustomerHistoryPermission
 from .pagination import DefaultPagination
-from .models import Cart, CartItem, Collection, Customer, OrderItem, Product, Review
-from .serializers import AddCartItemSerializer, CartItemSerializer, CartSerializer, CustomerSerializer, ProductSerializer,CollectionSerializer, ReviewSerializer, UpdateCartItemSerializer
+from .models import Cart, CartItem, Collection, Customer, Order, OrderItem, Product, Review
+from .serializers import AddCartItemSerializer, CartItemSerializer, CartSerializer, CustomerSerializer, OrderSerializer, ProductSerializer,CollectionSerializer, ReviewSerializer, UpdateCartItemSerializer
 from django.db.models.aggregates import Count
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin,RetrieveModelMixin,DestroyModelMixin,UpdateModelMixin
@@ -118,6 +118,17 @@ class CustomerViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+        
+class OrderviewSet(ModelViewSet):
+    serializer_class=OrderSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        user=self.request.user
+        if user.is_staff:
+            return Order.objects.all()
+        customer_id,created=Customer.objects.only('id').get_or_create(user_id=self.request.user.id)
+        return Order.objects.filter(customer_id=customer_id)
 
 
 
